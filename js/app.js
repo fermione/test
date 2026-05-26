@@ -3,6 +3,7 @@
   var BEIJING_LON = 116.4074;
   var TIMEZONE = "Asia/Shanghai";
   var DEFAULT_REFRESH_HOURS = 1;
+  var TIME_SEPARATOR = " / ";
   var refreshTimer = null;
 
   var dateEl = document.getElementById("date");
@@ -11,7 +12,7 @@
   var currentTempEl = document.getElementById("current-temp");
   var windEl = document.getElementById("wind");
   var humidityEl = document.getElementById("humidity");
-  var weatherEl = document.getElementById("weather");
+  var sunriseSunsetEl = document.getElementById("sunrise-sunset");
   var highLowEl = document.getElementById("high-low");
   var historyLastYearEl = document.getElementById("history-last-year");
   var historyTwoYearsEl = document.getElementById("history-two-years");
@@ -110,6 +111,25 @@
 
   function formatDisplayDateTime(date) {
     return formatDisplayDate(date) + " " + pad2(date.getHours()) + ":" + pad2(date.getMinutes());
+  }
+
+  function formatTimeFromIso(value) {
+    if (!value || typeof value !== "string") {
+      return "--";
+    }
+
+    var parts = value.split("T");
+    if (parts.length < 2 || !parts[1]) {
+      return "--";
+    }
+
+    var timeText = parts[1];
+    var match = timeText.match(/^(\d{1,2}):(\d{2})/);
+    if (!match) {
+      return "--";
+    }
+
+    return pad2(Number(match[1])) + ":" + match[2];
   }
 
   function formatTemperature(value) {
@@ -215,7 +235,7 @@
       "?latitude=" + BEIJING_LAT +
       "&longitude=" + BEIJING_LON +
       "&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,wind_direction_10m" +
-      "&daily=temperature_2m_max,temperature_2m_min,weather_code" +
+      "&daily=temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset" +
       "&timezone=" + TIMEZONE +
       "&forecast_days=1";
   }
@@ -266,7 +286,7 @@
     setText(currentTempEl, "--");
     setText(windEl, "--");
     setText(humidityEl, "--");
-    setText(weatherEl, "--");
+    setText(sunriseSunsetEl, "--");
     setText(highLowEl, "--");
     setText(historyLastYearEl, "--");
     setText(historyTwoYearsEl, "--");
@@ -281,6 +301,9 @@
     var minTemp = daily.temperature_2m_min && daily.temperature_2m_min.length ? daily.temperature_2m_min[0] : null;
     var maxTemp = daily.temperature_2m_max && daily.temperature_2m_max.length ? daily.temperature_2m_max[0] : null;
     var weatherText = info.text;
+    var sunrise = daily.sunrise && daily.sunrise.length ? daily.sunrise[0] : null;
+    var sunset = daily.sunset && daily.sunset.length ? daily.sunset[0] : null;
+    var sunriseSunsetText = formatTimeFromIso(sunrise) + TIME_SEPARATOR + formatTimeFromIso(sunset);
 
     setText(dateEl, formatDisplayDate(new Date()));
     setText(weatherIconEl, info.icon);
@@ -288,8 +311,8 @@
     setText(currentTempEl, formatTemperature(current.temperature_2m));
     setText(windEl, formatWindSpeed(current.wind_speed_10m) + " " + degreesToDirection(current.wind_direction_10m));
     setText(humidityEl, formatHumidity(current.relative_humidity_2m));
-    setText(weatherEl, weatherText);
-    setText(highLowEl, formatTemperature(minTemp) + " / " + formatTemperature(maxTemp));
+    setText(sunriseSunsetEl, sunriseSunsetText);
+    setText(highLowEl, formatTemperature(minTemp) + TIME_SEPARATOR + formatTemperature(maxTemp));
     setUpdateStatus("数据更新时间：" + currentTime);
   }
 
@@ -298,7 +321,7 @@
     var info = weatherInfo(daily.weather_code && daily.weather_code.length ? daily.weather_code[0] : null);
     var maxTemp = daily.temperature_2m_max && daily.temperature_2m_max.length ? daily.temperature_2m_max[0] : null;
     var minTemp = daily.temperature_2m_min && daily.temperature_2m_min.length ? daily.temperature_2m_min[0] : null;
-    var text = info.text + "，" + formatTemperature(minTemp) + " / " + formatTemperature(maxTemp);
+    var text = info.text + "，" + formatTemperature(minTemp) + TIME_SEPARATOR + formatTemperature(maxTemp);
 
     setText(element, text);
   }
