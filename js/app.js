@@ -312,7 +312,7 @@
     setText(windEl, formatWindSpeed(current.wind_speed_10m) + " " + degreesToDirection(current.wind_direction_10m));
     setText(humidityEl, formatHumidity(current.relative_humidity_2m));
     setText(sunriseSunsetEl, sunriseSunsetText);
-    setText(highLowEl, formatTemperature(minTemp) + " / " + formatTemperature(maxTemp));
+    setText(highLowEl, formatTemperature(minTemp) + TIME_SEPARATOR + formatTemperature(maxTemp));
     setUpdateStatus("数据更新时间：" + currentTime);
   }
 
