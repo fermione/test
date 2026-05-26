@@ -321,7 +321,7 @@
     var info = weatherInfo(daily.weather_code && daily.weather_code.length ? daily.weather_code[0] : null);
     var maxTemp = daily.temperature_2m_max && daily.temperature_2m_max.length ? daily.temperature_2m_max[0] : null;
     var minTemp = daily.temperature_2m_min && daily.temperature_2m_min.length ? daily.temperature_2m_min[0] : null;
-    var text = info.text + "，" + formatTemperature(minTemp) + " / " + formatTemperature(maxTemp);
+    var text = info.text + "，" + formatTemperature(minTemp) + TIME_SEPARATOR + formatTemperature(maxTemp);
 
     setText(element, text);
   }
