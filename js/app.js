@@ -3,7 +3,7 @@
   var BEIJING_LON = 116.4074;
   var TIMEZONE = "Asia/Shanghai";
   var DEFAULT_REFRESH_HOURS = 1;
-  var MIN_TIME_TEXT_LENGTH = 5;
+  var TIME_SEPARATOR = " / ";
   var refreshTimer = null;
 
   var dateEl = document.getElementById("date");
@@ -123,11 +123,13 @@
       return "--";
     }
 
-    if (parts[1].length < MIN_TIME_TEXT_LENGTH) {
+    var timeText = parts[1];
+    var match = timeText.match(/^(\d{1,2}):(\d{2})/);
+    if (!match) {
       return "--";
     }
 
-    return parts[1].slice(0, MIN_TIME_TEXT_LENGTH);
+    return pad2(Number(match[1])) + ":" + match[2];
   }
 
   function formatTemperature(value) {
@@ -301,7 +303,7 @@
     var weatherText = info.text;
     var sunrise = daily.sunrise && daily.sunrise.length ? daily.sunrise[0] : null;
     var sunset = daily.sunset && daily.sunset.length ? daily.sunset[0] : null;
-    var sunriseSunsetText = formatTimeFromIso(sunrise) + " / " + formatTimeFromIso(sunset);
+    var sunriseSunsetText = formatTimeFromIso(sunrise) + TIME_SEPARATOR + formatTimeFromIso(sunset);
 
     setText(dateEl, formatDisplayDate(new Date()));
     setText(weatherIconEl, info.icon);
