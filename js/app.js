@@ -3,6 +3,7 @@
   var BEIJING_LON = 116.4074;
   var TIMEZONE = "Asia/Shanghai";
   var DEFAULT_REFRESH_HOURS = 1;
+  var MIN_TIME_TEXT_LENGTH = 5;
   var refreshTimer = null;
 
   var dateEl = document.getElementById("date");
@@ -122,11 +123,11 @@
       return "--";
     }
 
-    if (parts[1].length < 5) {
+    if (parts[1].length < MIN_TIME_TEXT_LENGTH) {
       return "--";
     }
 
-    return parts[1].slice(0, 5);
+    return parts[1].slice(0, MIN_TIME_TEXT_LENGTH);
   }
 
   function formatTemperature(value) {
