@@ -1,44 +1,183 @@
+html {
+    background: #ffffff;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 12px;
+    color: #000000;
+    background: #ffffff;
+    font-family: Arial, "Microsoft YaHei", sans-serif;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+}
+
+.page {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
 }
 
 h1 {
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    line-height: 1.1;
     text-align: center;
-    color: #4a90e2;
+    font-weight: 700;
 }
 
-.weather-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.headline {
+    display: table;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 2px solid #000000;
 }
 
-.weather-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+.headline__date,
+.headline__weather {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 12px 14px;
 }
 
-.temperature {
-    font-size: 2em;
-    font-weight: bold;
+.headline__date {
+    width: 58%;
+    font-size: 1.65rem;
+    font-weight: 700;
 }
 
-.description {
-    font-size: 1.2em;
-    color: #666;
+.headline__weather {
+    width: 42%;
+    text-align: right;
+    font-size: 1.65rem;
+    white-space: nowrap;
 }
 
-.footer {
+.headline__icon {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 2.3rem;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.headline__text {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 700;
+}
+
+.details {
+    border: 2px solid #000000;
+    border-top: none;
+}
+
+.row {
+    display: table;
+    width: 100%;
+    border-top: 1px solid #000000;
+}
+
+.row:first-child {
+    border-top: none;
+}
+
+.label,
+.value {
+    display: table-cell;
+    padding: 9px 14px;
+    vertical-align: middle;
+}
+
+.label {
+    width: 35%;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.value {
+    width: 65%;
+    font-size: 1.5rem;
+    text-align: right;
+    word-break: break-word;
+}
+
+.label_history,
+.value_history {
+    display: table-cell;
+    padding: 10px 14px;
+    vertical-align: middle;
+}
+
+.label_history {
+    width: 48%;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.value_history {
+    width: 52%;
+    font-size: 1rem;
+    text-align: right;
+    word-break: break-word;
+}
+
+.history-item {
+    display: block;
+}
+
+.history-item + .history-item {
+    margin-top: 4px;
+}
+
+.row--quote {
+    background: #f7f7f7;
+}
+
+.value--quote {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    text-align: left;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+#wiki-quote {
+    display: block;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-weight: 700;
+}
+
+.value--quote.quote-size-short #wiki-quote {
+    font-size: 1.45rem;
+}
+
+.value--quote.quote-size-medium #wiki-quote {
+    font-size: 1.25rem;
+}
+
+.value--quote.quote-size-long #wiki-quote {
+    font-size: 1.05rem;
+}
+
+.quote-author {
+    display: block;
+    margin-top: 4px;
+    text-align: right;
+    font-size: 0.9rem;
+    color: #333333;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.status {
+    min-height: 1.2em;
+    margin: 8px 2px 0;
+    font-size: 0.9rem;
+    color: #444444;
     text-align: center;
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #999;
 }

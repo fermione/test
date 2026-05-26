@@ -3,21 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="refresh" content="3600" />
   <title>北京天气</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
-  <div class="container">
+<body data-refresh-hours="1">
+  <main class="page">
     <h1>北京天气</h1>
-    <div id="weather">
-      <p id="location">城市：北京</p>
-      <p id="temperature">气温：--</p>
-      <p id="description">天气：--</p>
-      <p id="sunrise">日出：--</p>
-      <p id="sunset">日落：--</p>
-    </div>
-    <button id="refresh">刷新天气</button>
-  </div>
+
+    <section class="headline" aria-label="日期和天气图标">
+      <div class="headline__date" id="date">--</div>
+      <div class="headline__weather" aria-label="天气状况">
+        <span class="headline__icon" id="weather-icon">--</span>
+        <span class="headline__text" id="weather-text">--</span>
+      </div>
+    </section>
+
+    <section class="details" aria-label="天气详情">
+      <div class="row">
+        <span class="label">当前气温</span>
+        <span class="value" id="current-temp">--</span>
+      </div>
+      <div class="row">
+        <span class="label">风力风向</span>
+        <span class="value" id="wind">--</span>
+      </div>
+      <div class="row">
+        <span class="label">湿度</span>
+        <span class="value" id="humidity">--</span>
+      </div>
+      <div class="row">
+        <span class="label">天气</span>
+        <span class="value" id="weather">--</span>
+      </div>
+      <div class="row">
+        <span class="label">气温</span>
+        <span class="value" id="high-low">--</span>
+      </div>
+      <div class="row">
+        <span class="label_history">往年今日</span>
+        <span class="value_history">
+          <span class="history-item">去年：<span id="history-last-year">--</span></span>
+          <span class="history-item">前年：<span id="history-two-years">--</span></span>
+        </span>
+      </div>
+      <div class="row row--quote" aria-label="名言">
+        <span class="value value--quote">
+          <span id="wiki-quote">--</span>
+          <span class="quote-author" id="wiki-quote-author">--</span>
+        </span>
+      </div>
+    </section>
+
+    <p class="status" aria-live="polite">
+      <span id="updated-at">--</span>
+    </p>
+  </main>
+
   <script src="js/app.js"></script>
 </body>
 </html>

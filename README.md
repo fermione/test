@@ -1,44 +1,45 @@
-# Kindle Weather Web
+# 北京天气
 
-This project is a simple webpage that displays local weather information and is optimized for access using a Kindle browser.
+这是一个面向 Kindle 浏览器的纯静态天气页，默认展示北京天气，数据来自 Open-Meteo，不需要构建工具、后端服务或 API Key。
 
-## Project Structure
+## 展示内容
+
+页面只显示这些信息：
+
+- 当天日期
+- 符号形式的天气状况
+- 当前气温
+- 风力风向
+- 湿度
+- 天气
+- 最高最低气温
+- 去年今日天气
+- 前年今日天气
+- 数据更新时间
+
+## 运行方式
+
+1. 直接打开 `index.html` 即可。
+2. 也可以把整个仓库部署到 GitHub Pages。
+
+## 自动刷新
+
+页面会按小时级间隔自动刷新，默认是 1 小时一次。
+
+如果你想改成 2 小时或其他小时数，只需要修改 `index.html` 里的 `data-refresh-hours` 和 `meta refresh` 时间即可。
+
+## 目录结构
 
 ```
 kindle-weather-web
+├── index.html
 ├── css
-│   └── styles.css       # Styles for the webpage
+│   └── styles.css
 ├── js
-│   └── app.js           # JavaScript for fetching weather data
-├── index.html           # Main HTML document
-├── .gitignore           # Files and directories to ignore in Git
-└── README.md            # Project documentation
+│   └── app.js
+└── README.md
 ```
 
-## Setup Instructions
+## 兼容性说明
 
-1. **Clone the repository**:
-   ```
-   git clone https://github.com/yourusername/kindle-weather-web.git
-   ```
-
-2. **Navigate to the project directory**:
-   ```
-   cd kindle-weather-web
-   ```
-
-3. **Open `index.html` in a web browser**:
-   You can open the `index.html` file directly in your Kindle browser to view the weather information.
-
-## Dependencies
-
-This project does not require any external libraries or frameworks. It uses native JavaScript to fetch weather data from a weather API.
-
-## Usage
-
-- The webpage will automatically fetch local weather information based on the user's location.
-- Ensure that your Kindle browser has access to the internet to retrieve the weather data.
-
-## License
-
-This project is open-source and available under the MIT License.
+这个版本尽量使用了老浏览器也能理解的写法，以提高 Kindle 4 上的可用性。页面本身仍然依赖网络访问 Open-Meteo。
