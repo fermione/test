@@ -110,13 +110,13 @@ h1 {
 }
 
 .label_history {
-    width: 48%;
+    width: 30%;
     font-size: 1rem;
     font-weight: 700;
 }
 
 .value_history {
-    width: 52%;
+    width: 70%;
     font-size: 1rem;
     text-align: right;
     word-break: break-word;
