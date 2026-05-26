@@ -122,6 +122,10 @@
       return "--";
     }
 
+    if (parts[1].length < 5) {
+      return "--";
+    }
+
     return parts[1].slice(0, 5);
   }
 
