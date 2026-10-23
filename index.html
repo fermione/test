@@ -32,6 +32,7 @@ a{color:var(--teal2)}
 .brand{display:flex;align-items:center;gap:12px}
 .brand h1{margin:0;font-size:26px;font-weight:900;letter-spacing:.5px}
 .brand h1 em{font-style:normal;color:var(--gold)}
+.brand h1 .title-en-short{display:none}
 .brand .sub{font-size:12px;letter-spacing:.24em;color:var(--dim);text-transform:uppercase;margin-top:2px}
 .top .spacer{flex:1}
 .top .pacenote{font-size:12px;color:var(--mut);text-align:right;line-height:1.6}
@@ -86,7 +87,7 @@ button.secondary:hover,.menu-action.secondary:hover{background:rgba(255,255,255,
 .btn:active{transform:translateY(1px)}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--mut);height:42px;font-weight:500}
 .btn.ghost:hover{color:var(--ink);border-color:var(--dim)}
-.btn.boost{display:inline-flex;align-items:center;gap:8px;padding:0 18px;height:50px;background:linear-gradient(180deg,#173b5b,#122a45);border:1px solid rgba(99,220,194,.35);color:var(--teal2)}
+.btn.boost{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;height:50px;background:linear-gradient(180deg,#173b5b,#122a45);border:1px solid rgba(99,220,194,.35);color:var(--teal2);text-align:center}
 .btn.boost:hover{background:linear-gradient(180deg,#1b4d6d,#143150);box-shadow:0 4px 14px rgba(99,220,194,.18)}
 .controls .formula{flex:1 1 100%;font-size:12.5px;color:var(--dim);border-top:1px dashed var(--line);padding-top:10px;margin-top:4px}
 .controls .formula b{color:var(--teal2);font-weight:500}
@@ -211,11 +212,15 @@ footer{text-align:center;font-size:12px;color:var(--dim);padding:18px 0 6px}
   .top{gap:8px;padding-bottom:14px}
   .brand{min-width:0}
   .brand h1{font-size:17px;letter-spacing:0;white-space:nowrap;line-height:1.2}
-  .brand h1 em{display:none}
+  .brand h1 em{font-size:12px}
   .brand .sub{font-size:11px;letter-spacing:.12em}
   .inputrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .inputrow input{grid-column:1 / -1;height:58px;font-size:18px}
   .inputrow .btn{width:100%;height:52px;padding:0 8px;font-size:14px}
+}
+@media (max-width:380px){
+  .brand h1 .title-en-full{display:none}
+  .brand h1 .title-en-short{display:inline}
 }
 @media (prefers-reduced-motion: reduce){
   .markerring.pulse{animation:none}
@@ -229,7 +234,7 @@ footer{text-align:center;font-size:12px;color:var(--dim);padding:18px 0 6px}
   <header class="top">
     <div class="brand">
       <div>
-        <h1><span id="titlePrefix"></span>🌏环球旅行<em> · Walk the World</em></h1>
+        <h1><span id="titlePrefix"></span>🌏环球旅行<em><span class="title-en-full"> · Walk the World</span><span class="title-en-short"> · WW</span></em></h1>
         <div class="sub">千里之行 始于足下</div>
       </div>
     </div>
@@ -272,6 +277,7 @@ footer{text-align:center;font-size:12px;color:var(--dim);padding:18px 0 6px}
         </div>
         <button id="dailyReset" class="menu-action danger small" type="button">6）当日归零</button>
         <button id="fullReset" class="menu-action danger small" type="button">7）全部归零重置</button>
+        <button id="closeSettings" class="menu-action secondary" type="button">退出设置</button>
       </div>
     </div>
   </header>
@@ -1299,6 +1305,12 @@ $('#settingBoostDistance').addEventListener('keydown',e=>{if(e.key==='Enter')sav
 $('#settingTitlePrefix').addEventListener('keydown',e=>{if(e.key==='Enter')saveAllSettings();});
 $('#exportSteps').addEventListener('click', exportStepHistory);
 $('#importSteps').addEventListener('click', () => $('#importHistoryFile').click());
+$('#closeSettings').addEventListener('click',()=>{
+  const menu=$('#settingsMenu');
+  const toggle=$('#settingsToggle');
+  if(menu){menu.setAttribute('hidden','hidden');}
+  if(toggle){toggle.setAttribute('aria-expanded','false');}
+});
 $('#importHistoryFile').addEventListener('change', (event) => {
   const file = event.target.files && event.target.files[0];
   if(file){ importStepHistory(file); }
