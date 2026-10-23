@@ -121,6 +121,7 @@ button.secondary:hover,.menu-action.secondary:hover{background:rgba(255,255,255,
 .mapcard{position:relative;overflow:hidden;padding:0;cursor:grab}
 .mapcard.dragging{cursor:grabbing}
 .mapcard[hidden]{display:none}
+.mapcard{touch-action:none;overscroll-behavior:contain}
 .mapcard svg{display:block;width:100%;height:auto;transform-origin:center center;transition:transform .15s ease;will-change:transform}
 .mapcard .maphint{position:absolute;left:12px;bottom:10px;font-size:11px;color:var(--dim);pointer-events:none;background:rgba(11,23,38,.6);padding:2px 8px;border-radius:6px}
 .mapcard .maphint .legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
@@ -207,9 +208,14 @@ footer{text-align:center;font-size:12px;color:var(--dim);padding:18px 0 6px}
   .grid{grid-template-columns:repeat(2,1fr)}
   .now{grid-template-columns:1fr}
   .top .pacenote{display:none}
-  .brand h1{font-size:22px}
-  .inputrow{flex-direction:column}
-  .btn{width:100%}
+  .top{gap:8px;padding-bottom:14px}
+  .brand{min-width:0}
+  .brand h1{font-size:17px;letter-spacing:0;white-space:nowrap;line-height:1.2}
+  .brand h1 em{display:none}
+  .brand .sub{font-size:11px;letter-spacing:.12em}
+  .inputrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .inputrow input{grid-column:1 / -1;height:58px;font-size:18px}
+  .inputrow .btn{width:100%;height:52px;padding:0 8px;font-size:14px}
 }
 @media (prefers-reduced-motion: reduce){
   .markerring.pulse{animation:none}
@@ -888,7 +894,17 @@ function renderWorld(j){
   const mark=document.createElementNS(NS,'circle'); mark.setAttribute('class','marker'); mark.setAttribute('cx',w.x); mark.setAttribute('cy',w.y); mark.setAttribute('r',4.5); svg.appendChild(mark);
 }
 
-const mapZoomState = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0 };
+const mapZoomState = {
+  scale: 1,
+  x: 0,
+  y: 0,
+  dragging: false,
+  startX: 0,
+  startY: 0,
+  pinchStartDistance: 0,
+  pinchStartScale: 1,
+  isPinching: false
+};
 function applyMapZoom(){
   const svg=$('#worldMap');
   if(!svg) return;
@@ -956,6 +972,72 @@ if(mapCard){
   mapCard.addEventListener('pointerup', endDrag);
   mapCard.addEventListener('pointerleave', endDrag);
   mapCard.addEventListener('pointercancel', endDrag);
+
+  const touchDistance = (touchA, touchB) => {
+    const dx = touchA.clientX - touchB.clientX;
+    const dy = touchA.clientY - touchB.clientY;
+    return Math.hypot(dx, dy);
+  };
+
+  const touchMidpoint = (touchA, touchB, rect) => ({
+    x: ((touchA.clientX + touchB.clientX) / 2) - rect.left,
+    y: ((touchA.clientY + touchB.clientY) / 2) - rect.top
+  });
+
+  mapCard.addEventListener('touchstart', (event) => {
+    if(event.touches.length === 2){
+      const [a, b] = event.touches;
+      mapZoomState.isPinching = true;
+      mapZoomState.dragging = false;
+      mapZoomState.pinchStartDistance = touchDistance(a, b);
+      mapZoomState.pinchStartScale = mapZoomState.scale;
+      event.preventDefault();
+      return;
+    }
+
+    if(event.touches.length === 1 && mapZoomState.scale > 1){
+      const touch = event.touches[0];
+      mapZoomState.dragging = true;
+      mapZoomState.isPinching = false;
+      mapZoomState.startX = touch.clientX - mapZoomState.x;
+      mapZoomState.startY = touch.clientY - mapZoomState.y;
+      mapCard.classList.add('dragging');
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  mapCard.addEventListener('touchmove', (event) => {
+    if(mapZoomState.isPinching && event.touches.length === 2){
+      const [a, b] = event.touches;
+      const nextDistance = touchDistance(a, b);
+      if(mapZoomState.pinchStartDistance > 0){
+        const rect = mapCard.getBoundingClientRect();
+        const anchor = touchMidpoint(a, b, rect);
+        const ratio = nextDistance / mapZoomState.pinchStartDistance;
+        setZoom(mapZoomState.pinchStartScale * ratio, anchor.x, anchor.y);
+      }
+      event.preventDefault();
+      return;
+    }
+
+    if(mapZoomState.dragging && event.touches.length === 1){
+      const touch = event.touches[0];
+      mapZoomState.x = touch.clientX - mapZoomState.startX;
+      mapZoomState.y = touch.clientY - mapZoomState.startY;
+      clampMapOffset();
+      applyMapZoom();
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  const endTouchGesture = () => {
+    mapZoomState.dragging = false;
+    mapZoomState.isPinching = false;
+    mapCard.classList.remove('dragging');
+  };
+
+  mapCard.addEventListener('touchend', endTouchGesture);
+  mapCard.addEventListener('touchcancel', endTouchGesture);
 }
 
 const weatherRequestTokens = { now: 0, next: 0 };
